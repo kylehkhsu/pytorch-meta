@@ -157,7 +157,8 @@ class MetaDataset(object):
         transformed version of it. E.g. `transforms.ClassSplitter()`.
     """
     def __init__(self, meta_train=False, meta_val=False, meta_test=False,
-                 meta_split=None, target_transform=None, dataset_transform=None):
+                 meta_split=None, target_transform=None, dataset_transform=None,
+                 seed=None):
         if meta_train + meta_val + meta_test == 0:
             if meta_split is None:
                 raise ValueError('The meta-split is undefined. Use either the '
@@ -179,7 +180,7 @@ class MetaDataset(object):
         self._meta_split = meta_split
         self.target_transform = target_transform
         self.dataset_transform = dataset_transform
-        self.seed()
+        self.seed(seed)
 
     @property
     def meta_split(self):
