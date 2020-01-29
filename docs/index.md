@@ -19,6 +19,7 @@ A collection of extensions and data-loaders for few-shot learning & meta-learnin
     - Tiered-ImageNet ([Ren et al., 2018](https://arxiv.org/abs/1803.00676))
     - CIFAR-FS ([Bertinetto et al., 2018](https://arxiv.org/abs/1805.08136))
     - Fewshot-CIFAR100 ([Oreshkin et al., 2018](https://arxiv.org/abs/1805.10123))
+    - Caltech-UCSD Birds ([Hilliard et al., 2019](https://arxiv.org/abs/1802.04376), [Wah et al., 2019](http://www.vision.caltech.edu/visipedia/CUB-200-2011.html))
 
 ## Installation
 You can install Torchmeta either using Python's package manager pip, or from source. To avoid any conflict with your existing Python setup, it is suggested to work in a virtual environment with [`virtualenv`](https://docs.python-guide.org/dev/virtualenvs/). To install `virtualenv`:
@@ -30,7 +31,7 @@ source venv/bin/activate
 
 #### Requirements
  - Python 3.5 or above
- - PyTorch 1.2
+ - PyTorch 1.3
  - Torchvision 0.4
 
 #### Using pip
@@ -69,7 +70,7 @@ for batch in dataloader:
 ```
 
 #### Advanced example
-Helper functions are only avaiable for some of the datasets available. However, all of them are available through the unified interface provided by Torchmeta. The variable `dataset` defined above is equivalent to the following
+Helper functions are only available for some of the datasets available. However, all of them are available through the unified interface provided by Torchmeta. The variable `dataset` defined above is equivalent to the following
 ```python
 from torchmeta.datasets import Omniglot
 from torchmeta.transforms import Categorical, ClassSplitter, Rotation
