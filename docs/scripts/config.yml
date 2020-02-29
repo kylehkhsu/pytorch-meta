@@ -10,6 +10,8 @@ api-reference:
         - FC100
         - CIFARFS
         - CUB
+        - DoubleMNIST
+        - TripleMNIST
         - TCGA
 
   - docs/api_reference/modules.md:

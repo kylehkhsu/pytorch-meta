@@ -6,7 +6,7 @@ from itertools import combinations
 from torchvision.transforms import Compose
 
 from torchmeta.utils.data.task import ConcatTask
-from torchmeta.transforms import FixedCategory, Categorical
+from torchmeta.transforms import FixedCategory, Categorical, DefaultTargetTransform
 from torchmeta.transforms.utils import wrap_transform
 
 __all__ = ['ClassDataset', 'MetaDataset', 'CombinationMetaDataset']
@@ -197,6 +197,8 @@ class MetaDataset(object):
 
     def seed(self, seed=None):
         self.np_random = np.random.RandomState(seed=seed)
+        # Seed the dataset transform
+        _seed_dataset_transform(self.dataset_transform, seed=seed)
 
     def __iter__(self):
         for index in range(len(self)):
@@ -242,6 +244,12 @@ class CombinationMetaDataset(MetaDataset):
                 '`int`, got `{0}`.'.format(type(num_classes_per_task)))
         self.dataset = dataset
         self.num_classes_per_task = num_classes_per_task
+        # If no target_transform, then use a default target transform that
+        # is well behaved for the `default_collate` function (assign class
+        # augmentations ot integers).
+        if target_transform is None:
+            target_transform = DefaultTargetTransform(dataset.class_augmentations)
+
         super(CombinationMetaDataset, self).__init__(meta_train=dataset.meta_train,
             meta_val=dataset.meta_val, meta_test=dataset.meta_test,
             meta_split=dataset.meta_split, target_transform=target_transform,
@@ -290,3 +298,11 @@ class CombinationMetaDataset(MetaDataset):
         for i in range(1, self.num_classes_per_task + 1):
             length *= (num_classes - i + 1) / i
         return int(length)
+
+
+def _seed_dataset_transform(transform, seed=None):
+    if isinstance(transform, Compose):
+        for subtransform in transform.transforms:
+            _seed_dataset_transform(subtransform, seed=seed)
+    elif hasattr(transform, 'seed'):
+        transform.seed(seed=seed)
